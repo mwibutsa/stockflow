@@ -14,7 +14,7 @@ import java.util.Map;
 public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorDto> handleUnreadableMessage(Exception ex) {
-        return ResponseEntity.badRequest().body(new ErrorDto("Invalid JSON payload"));
+        return ResponseEntity.badRequest().body(new ErrorDto(ex.getLocalizedMessage()));
     }
 
 
@@ -25,5 +25,10 @@ public class GlobalExceptionHandler {
             errors.put(fieldError.getField(), fieldError.getDefaultMessage());
         });
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(CustomException.class)
+    ResponseEntity<ErrorDto> handleException(CustomException ex) {
+        return ResponseEntity.status(ex.getStatusCode()).body(new ErrorDto(ex.getMessage(), ex.getField()));
     }
 }

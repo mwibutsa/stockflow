@@ -7,4 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class ErrorDto {
     private String error;
+    private String field;
+
+    public ErrorDto(String error) {
+        this.error = error;
+    }
 }

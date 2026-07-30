@@ -15,7 +15,6 @@ public class ProductSpecification {
             return criteriaBuilder.or(
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), pattern),
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("sku")), pattern),
-                    criteriaBuilder.like(criteriaBuilder.lower(root.get("category.name")), pattern),
                     criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), pattern)
             );
         };

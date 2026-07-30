@@ -3,6 +3,7 @@ package com.mwibutsa.stockflow.product;
 import com.mwibutsa.stockflow.common.PaginatedResponse;
 import com.mwibutsa.stockflow.common.PaginationDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public interface ProductMapper {
     ProductResponse toDto(Product product);
 
+    @Mapping(target = "sku", ignore = true)
+    @Mapping(target = "category", ignore = true)
     Product toEntity(ProductRequest payload);
 
     default PaginatedResponse<ProductResponse> toPageResponse(Page<Product> pageEntity) {
