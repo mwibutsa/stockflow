@@ -1,4 +1,4 @@
-GET {{host}}/categories
+GET {{host}}/products
 Accept: application/json
 
 ###

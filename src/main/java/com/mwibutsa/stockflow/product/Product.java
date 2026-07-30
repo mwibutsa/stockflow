@@ -2,16 +2,15 @@ package com.mwibutsa.stockflow.product;
 
 import com.mwibutsa.stockflow.category.Category;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -20,9 +19,12 @@ import java.util.UUID;
 @Table(name = "products")
 public class Product {
     @Id
-    @ColumnDefault("uuid_generate_v4()")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
     private UUID id;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "sku")
     private String sku;
@@ -30,25 +32,18 @@ public class Product {
     @Column(name = "barcode")
     private String barcode;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Column(name = "buying_price",precision = 10, scale = 2)
-    private BigDecimal buyingPrice;
+    @Column(name = "price")
+    private BigDecimal price;
 
-    @NotNull
-    @Column(name = "selling_price",precision = 10, scale = 2)
-    private BigDecimal sellingPrice;
+    @Column(name = "cost_price")
+    private BigDecimal costPrice;
 
-    @ColumnDefault("0")
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
-    @ColumnDefault("5")
     @Column(name = "min_stock_level")
     private Integer minStockLevel;
 
@@ -57,9 +52,14 @@ public class Product {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "created_at")
-    private Instant createdAt;
+    @Column(name = "unit")
+    private String unit;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
