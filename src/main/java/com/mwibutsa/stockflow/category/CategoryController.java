@@ -45,9 +45,15 @@ public class CategoryController {
         return categoryService.updateCategory(categoryId, payload);
     }
 
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable UUID categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
+
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorDto> exceptionHandler(CustomException ex) {
         return ResponseEntity.status(ex.getStatusCode()).body(new ErrorDto(ex.getMessage()));
     }
-
 }

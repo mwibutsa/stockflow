@@ -48,4 +48,13 @@ public class CategoryService {
         categoryRepository.save(category);
         return categoryMapper.toDto(category);
     }
+
+    public void deleteCategory(UUID categoryId) {
+        var category = categoryRepository.findByIdWithProducts(categoryId).orElseThrow(CategoryNotFoundException::new);
+
+        if (!category.getProducts().isEmpty()) {
+            throw new CategoryNotEmptyException();
+        }
+        categoryRepository.delete(category);
+    }
 }
