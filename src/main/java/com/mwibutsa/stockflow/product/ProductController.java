@@ -50,4 +50,10 @@ public class ProductController {
     public ProductResponse getProduct(@PathVariable UUID productId) {
         return productService.getProduct(productId);
     }
+
+
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable UUID productId, @Valid @RequestBody UpdateProductRequest payload) {
+        return ResponseEntity.ok(productService.updateProduct(productId, payload));
+    }
 }

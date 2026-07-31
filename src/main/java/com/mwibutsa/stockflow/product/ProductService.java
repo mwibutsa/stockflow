@@ -46,6 +46,19 @@ public class ProductService {
         return productMapper.toDto(product);
     }
 
+    public ProductResponse updateProduct(UUID productId, UpdateProductRequest payload) {
+        var existingProduct = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+        productMapper.update(payload, existingProduct);
+
+        if (payload.getCategoryId() != null && existingProduct.getCategory().getId() != payload.getCategoryId()) {
+            var category = categoryRepository.findById(payload.getCategoryId()).orElseThrow(() -> new BadRequestException("Invalid product category", "categoryId"));
+            existingProduct.setCategory(category);
+        }
+        productRepository.save(existingProduct);
+
+        return productMapper.toDto(existingProduct);
+    }
+
     private String generateUniqueSku(String categoryName, String productName) {
         // 1. Get first 3 letters of category and product (fallback to "GEN" / "PRD" if short)
         String catPrefix = formatToken(categoryName, "GEN");

@@ -4,6 +4,7 @@ import com.mwibutsa.stockflow.common.PaginatedResponse;
 import com.mwibutsa.stockflow.common.PaginationDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -28,4 +29,6 @@ public interface ProductMapper {
         );
         return new PaginatedResponse<>(content, metadata);
     }
+
+    void update(UpdateProductRequest payload, @MappingTarget Product existingProduct);
 }
