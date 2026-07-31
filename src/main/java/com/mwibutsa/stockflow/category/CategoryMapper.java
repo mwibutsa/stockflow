@@ -2,14 +2,11 @@ package com.mwibutsa.stockflow.category;
 
 import com.mwibutsa.stockflow.category.dto.CategoryRequest;
 import com.mwibutsa.stockflow.category.dto.CategoryResponse;
+import com.mwibutsa.stockflow.common.mapper.BaseMapper;
+import com.mwibutsa.stockflow.common.mapper.ToEntityMapper;
 import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper {
-    CategoryResponse toDto(Category category);
-
-    Category toEntity(CategoryRequest payload);
-
-    Category update(CategoryRequest payload, @MappingTarget Category category);
+public interface CategoryMapper extends BaseMapper<Category, CategoryResponse>,
+        ToEntityMapper<Category, CategoryRequest> {
 }
