@@ -1,6 +1,9 @@
 package com.mwibutsa.stockflow.product;
 
-import com.mwibutsa.stockflow.common.PaginatedResponse;
+import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
+import com.mwibutsa.stockflow.product.dto.ProductRequest;
+import com.mwibutsa.stockflow.product.dto.ProductResponse;
+import com.mwibutsa.stockflow.product.dto.UpdateProductRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -59,7 +62,6 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
-
         productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }

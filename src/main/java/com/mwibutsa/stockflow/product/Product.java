@@ -4,10 +4,7 @@ import com.mwibutsa.stockflow.category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +14,8 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "products")
+@SQLDelete(sql = "UPDATE products SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = false")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -41,9 +40,11 @@ public class Product {
     @Column(name = "cost_price")
     private BigDecimal costPrice;
 
+    @ColumnDefault("0")
     @Column(name = "stock_quantity")
     private Integer stockQuantity;
 
+    @ColumnDefault("0")
     @Column(name = "min_stock_level")
     private Integer minStockLevel;
 
@@ -62,4 +63,8 @@ public class Product {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ColumnDefault("false")
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 }

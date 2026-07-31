@@ -1,4 +1,4 @@
-package com.mwibutsa.stockflow.common;
+package com.mwibutsa.stockflow.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

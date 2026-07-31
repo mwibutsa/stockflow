@@ -1,6 +1,5 @@
-package com.mwibutsa.stockflow.product;
+package com.mwibutsa.stockflow.product.dto;
 
-import com.mwibutsa.stockflow.common.BaseProductDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

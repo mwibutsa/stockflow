@@ -1,5 +1,7 @@
 package com.mwibutsa.stockflow.category;
 
+import com.mwibutsa.stockflow.category.dto.CategoryRequest;
+import com.mwibutsa.stockflow.category.dto.CategoryResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

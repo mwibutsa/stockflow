@@ -1,7 +1,6 @@
-package com.mwibutsa.stockflow.product;
+package com.mwibutsa.stockflow.product.dto;
 
-import com.mwibutsa.stockflow.category.CategoryResponse;
-import com.mwibutsa.stockflow.common.BaseProductDto;
+import com.mwibutsa.stockflow.category.dto.CategoryResponse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

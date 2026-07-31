@@ -1,5 +1,7 @@
 package com.mwibutsa.stockflow.category;
 
+import com.mwibutsa.stockflow.category.dto.CategoryRequest;
+import com.mwibutsa.stockflow.category.dto.CategoryResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

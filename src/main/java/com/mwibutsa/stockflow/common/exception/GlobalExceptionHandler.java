@@ -1,6 +1,6 @@
 package com.mwibutsa.stockflow.common.exception;
 
-import com.mwibutsa.stockflow.common.ErrorDto;
+import com.mwibutsa.stockflow.common.dto.ErrorDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,6 +1,8 @@
 package com.mwibutsa.stockflow.category;
 
-import com.mwibutsa.stockflow.common.ErrorDto;
+import com.mwibutsa.stockflow.category.dto.CategoryRequest;
+import com.mwibutsa.stockflow.category.dto.CategoryResponse;
+import com.mwibutsa.stockflow.common.dto.ErrorDto;
 import com.mwibutsa.stockflow.common.exception.CustomException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

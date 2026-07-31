@@ -5,6 +5,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/stockflow?createDatabaseIfNotExist=true
     username: ${DB_USER}
     password: ${DB_PASSWORD}
+  jackson:
+    mapper:
+      accept-case-insensitive-enums: true
   jpa:
     show-sql: true
     properties:

@@ -1,4 +1,4 @@
-package com.mwibutsa.stockflow.common;
+package com.mwibutsa.stockflow.product.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -27,10 +27,10 @@ public class BaseProductDto {
     private BigDecimal costPrice;
 
     private String description;
-    
-    @Min(value = 0, message = "Stock quantity cannot be negative")
+
+    @Min(value = 0, message = "Minimum inventory level cannot be negative")
     private Integer stockQuantity = 0;
 
-    @Min(value = 0, message = "Minimum stock level cannot be negative")
+    @Min(value = 0, message = "Minimum inventory level cannot be negative")
     private Integer minStockLevel = 0;
 }

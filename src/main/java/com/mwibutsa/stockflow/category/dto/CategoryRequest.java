@@ -1,4 +1,4 @@
-package com.mwibutsa.stockflow.category;
+package com.mwibutsa.stockflow.category.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

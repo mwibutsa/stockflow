@@ -1,10 +1,9 @@
-package com.mwibutsa.stockflow.category;
+package com.mwibutsa.stockflow.category.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data

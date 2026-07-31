@@ -1,7 +1,10 @@
 package com.mwibutsa.stockflow.product;
 
-import com.mwibutsa.stockflow.common.PaginatedResponse;
-import com.mwibutsa.stockflow.common.PaginationDto;
+import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
+import com.mwibutsa.stockflow.common.dto.PaginationDto;
+import com.mwibutsa.stockflow.product.dto.ProductRequest;
+import com.mwibutsa.stockflow.product.dto.ProductResponse;
+import com.mwibutsa.stockflow.product.dto.UpdateProductRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -15,6 +18,7 @@ public interface ProductMapper {
 
     @Mapping(target = "sku", ignore = true)
     @Mapping(target = "category", ignore = true)
+    @Mapping(target = "stockQuantity", defaultValue = "0")
     Product toEntity(ProductRequest payload);
 
     default PaginatedResponse<ProductResponse> toPageResponse(Page<Product> pageEntity) {

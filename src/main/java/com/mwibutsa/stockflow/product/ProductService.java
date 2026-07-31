@@ -1,10 +1,13 @@
 package com.mwibutsa.stockflow.product;
 
 import com.mwibutsa.stockflow.category.CategoryRepository;
-import com.mwibutsa.stockflow.common.PaginatedResponse;
+import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
 import com.mwibutsa.stockflow.common.exception.BadRequestException;
 import com.mwibutsa.stockflow.common.exception.ConflictException;
 import com.mwibutsa.stockflow.common.exception.ProductNotFoundException;
+import com.mwibutsa.stockflow.product.dto.ProductRequest;
+import com.mwibutsa.stockflow.product.dto.ProductResponse;
+import com.mwibutsa.stockflow.product.dto.UpdateProductRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
