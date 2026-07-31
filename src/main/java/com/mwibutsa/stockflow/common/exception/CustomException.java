@@ -31,7 +31,7 @@ public class CustomException extends RuntimeException {
     }
 
     public CustomException(String message, HttpStatus statusCode) {
-        super();
+        super(message);
         this.statusCode = statusCode;
         this.field = null;
     }

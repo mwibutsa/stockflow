@@ -20,7 +20,7 @@ public interface ProductMapper {
     default PaginatedResponse<ProductResponse> toPageResponse(Page<Product> pageEntity) {
         List<ProductResponse> content = pageEntity.getContent().stream().map(this::toDto).toList();
         PaginationDto metadata = new PaginationDto(
-                pageEntity.getNumber(),
+                pageEntity.getNumber() + 1,
                 pageEntity.getSize(),
                 pageEntity.getTotalElements(),
                 pageEntity.getTotalPages(),

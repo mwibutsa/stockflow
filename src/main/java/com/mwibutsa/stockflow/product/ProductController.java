@@ -21,7 +21,7 @@ public class ProductController {
     @GetMapping
     public PaginatedResponse<ProductResponse> getAllProducts(
             @RequestParam(required = false) String search,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "DESC") String direction
@@ -30,7 +30,7 @@ public class ProductController {
         Sort.Direction sortDir = Sort.Direction.fromOptionalString(direction).orElse(Sort.Direction.DESC);
 
         // Pageable
-        Pageable pagination = PageRequest.of(page, size, Sort.by(sortDir, sortBy));
+        Pageable pagination = PageRequest.of(Math.max(page, 1) - 1, size, Sort.by(sortDir, sortBy));
         return productService.getAllProducts(search, pagination);
 
     }
@@ -55,5 +55,12 @@ public class ProductController {
     @PutMapping("/{productId}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable UUID productId, @Valid @RequestBody UpdateProductRequest payload) {
         return ResponseEntity.ok(productService.updateProduct(productId, payload));
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
+
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
     }
 }

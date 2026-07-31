@@ -21,7 +21,6 @@ public class ProductService {
 
     public PaginatedResponse<ProductResponse> getAllProducts(String search, Pageable pageable) {
         var spec = ProductSpecification.searchProducts(search);
-        IO.println(spec);
         var products = productRepository.findAll(spec, pageable);
         return productMapper.toPageResponse(products);
     }
@@ -55,7 +54,6 @@ public class ProductService {
             existingProduct.setCategory(category);
         }
         productRepository.save(existingProduct);
-
         return productMapper.toDto(existingProduct);
     }
 
@@ -85,5 +83,10 @@ public class ProductService {
             return String.format("%-" + 3 + "s", cleaned).replace(' ', 'X');
         }
         return cleaned.substring(0, 3);
+    }
+
+    public void deleteProduct(UUID productId) {
+        var product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
+        productRepository.delete(product);
     }
 }
