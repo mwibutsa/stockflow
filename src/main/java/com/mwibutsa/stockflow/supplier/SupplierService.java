@@ -8,6 +8,7 @@ import com.mwibutsa.stockflow.supplier.dto.SupplierResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -28,20 +29,35 @@ public class SupplierService {
 
     public SupplierResponse addSupplier(SupplierRequest payload) {
         // check unique email.
-        var existingSupplier = supplierRepository.findByEmail(payload.getEmail())
-                .orElse(null);
-
-        if (existingSupplier != null) {
-            throw new ConflictException("Email is already being used", "email");
-        }
+        ensureSupplierEmailAvailability(payload.getEmail());
 
         var supplier = supplierMapper.toEntity(payload);
 
         return supplierMapper.toDto(supplierRepository.save(supplier));
     }
 
+    private void ensureSupplierEmailAvailability(String email) {
+        var existingSupplier = supplierRepository.findByEmail(email)
+                .orElse(null);
+
+        if (existingSupplier != null) {
+            throw new ConflictException("Email is already being used", "email");
+        }
+    }
+
     public SupplierResponse getSupplier(UUID supplierId) {
         var supplier = supplierRepository.findById(supplierId).orElseThrow(SupplierNotFoundException::new);
         return supplierMapper.toDto(supplier);
+    }
+
+    public SupplierResponse updateSupplier(UUID supplierId, SupplierRequest payload) {
+        var supplier = supplierRepository.findById(supplierId).orElseThrow(SupplierNotFoundException::new);
+
+        if (!Objects.equals(supplier.getEmail(), payload.getEmail())) {
+            ensureSupplierEmailAvailability(payload.getEmail());
+        }
+
+        supplierMapper.update(payload, supplier);
+        return supplierMapper.toDto(supplierRepository.save(supplier));
     }
 }

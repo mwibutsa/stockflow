@@ -51,4 +51,9 @@ public class SupplierController {
     public SupplierResponse getSupplier(@PathVariable UUID supplierId) {
         return supplierService.getSupplier(supplierId);
     }
+
+    @PutMapping("/{supplierId}")
+    public SupplierResponse updateSupplier(@PathVariable UUID supplierId, @RequestBody SupplierRequest payload) {
+        return supplierService.updateSupplier(supplierId, payload);
+    }
 }
