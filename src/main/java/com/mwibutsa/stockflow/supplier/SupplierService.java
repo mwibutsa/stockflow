@@ -60,4 +60,9 @@ public class SupplierService {
         supplierMapper.update(payload, supplier);
         return supplierMapper.toDto(supplierRepository.save(supplier));
     }
+
+    public void deleteSupplier(UUID supplierId) {
+        var supplier = supplierRepository.findById(supplierId).orElseThrow(SupplierNotFoundException::new);
+        supplierRepository.delete(supplier);
+    }
 }

@@ -1,14 +1,13 @@
 package com.mwibutsa.stockflow.product;
 
 import com.mwibutsa.stockflow.category.Category;
+import com.mwibutsa.stockflow.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Getter
 @Setter
@@ -16,12 +15,7 @@ import java.util.UUID;
 @Table(name = "products")
 @SQLDelete(sql = "UPDATE products SET is_deleted = true WHERE id = ?")
 @SQLRestriction("is_deleted = false")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
-
+public class Product extends BaseEntity {
     @Column(name = "name")
     private String name;
 
@@ -55,16 +49,4 @@ public class Product {
 
     @Column(name = "unit")
     private String unit;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @ColumnDefault("false")
-    @Column(name = "is_deleted", nullable = false)
-    private boolean isDeleted = false;
 }

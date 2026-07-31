@@ -3,7 +3,7 @@ package com.mwibutsa.stockflow.category.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -12,7 +12,7 @@ public class CategoryResponse {
     private UUID id;
     private String name;
     private String description;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
 
 }

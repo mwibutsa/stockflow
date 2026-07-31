@@ -1,27 +1,20 @@
 package com.mwibutsa.stockflow.inventory;
 
+import com.mwibutsa.stockflow.common.entity.BaseEntity;
 import com.mwibutsa.stockflow.product.Product;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
 @Getter
 @Setter
 @Entity
 @Table(name = "stock_transactions")
-public class InventoryTransaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
-    private UUID id;
+public class InventoryTransaction extends BaseEntity {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.RESTRICT)
@@ -47,8 +40,4 @@ public class InventoryTransaction {
 
     @Column(name = "notes")
     private String notes;
-
-    @CreationTimestamp
-    @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
 }

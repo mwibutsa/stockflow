@@ -56,4 +56,10 @@ public class SupplierController {
     public SupplierResponse updateSupplier(@PathVariable UUID supplierId, @RequestBody SupplierRequest payload) {
         return supplierService.updateSupplier(supplierId, payload);
     }
+
+    @DeleteMapping("/{supplierId}")
+    public ResponseEntity<Void> deleteSupplier(@PathVariable UUID supplierId) {
+        supplierService.deleteSupplier(supplierId);
+        return ResponseEntity.noContent().build();
+    }
 }
