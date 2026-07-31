@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("/products")
@@ -34,9 +36,18 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest payload, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<ProductResponse> createProduct(
+            @Valid @RequestBody ProductRequest payload,
+            UriComponentsBuilder uriBuilder) {
+
         var product = productService.createProduct(payload);
         var uri = uriBuilder.path("/products/{productId}").buildAndExpand(product.getId()).toUri();
+
         return ResponseEntity.created(uri).body(product);
+    }
+
+    @GetMapping("/{productId}")
+    public ProductResponse getProduct(@PathVariable UUID productId) {
+        return productService.getProduct(productId);
     }
 }

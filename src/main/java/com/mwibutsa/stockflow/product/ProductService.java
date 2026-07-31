@@ -4,11 +4,13 @@ import com.mwibutsa.stockflow.category.CategoryRepository;
 import com.mwibutsa.stockflow.common.PaginatedResponse;
 import com.mwibutsa.stockflow.common.exception.BadRequestException;
 import com.mwibutsa.stockflow.common.exception.ConflictException;
+import com.mwibutsa.stockflow.common.exception.ProductNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +38,11 @@ public class ProductService {
         product.setSku(this.generateUniqueSku(category.getName(), product.getName()));
         productRepository.save(product);
 
+        return productMapper.toDto(product);
+    }
+
+    public ProductResponse getProduct(UUID productId) {
+        var product = productRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
         return productMapper.toDto(product);
     }
 
