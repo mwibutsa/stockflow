@@ -1,5 +1,6 @@
 package com.mwibutsa.stockflow.product;
 
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -18,7 +19,8 @@ public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpec
     @Query("select (count(p) > 0) from Product p where p.barcode = :barcode")
     boolean existsByBarcode(@Param("barcode") String barcode);
 
-    @Query("select p from Product p")
     @EntityGraph(attributePaths = "category")
-    Page<Product> findAllWithCategories(@Param("spec") Specification<Product> spec, Pageable pageable);
+    @Override
+    @NonNull Page<Product> findAll(@NonNull Specification<Product> spec, @NonNull Pageable pageable);
+
 }

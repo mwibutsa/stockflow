@@ -19,7 +19,8 @@ public class ProductService {
 
     public PaginatedResponse<ProductResponse> getAllProducts(String search, Pageable pageable) {
         var spec = ProductSpecification.searchProducts(search);
-        var products = productRepository.findAllWithCategories(spec, pageable);
+        IO.println(spec);
+        var products = productRepository.findAll(spec, pageable);
         return productMapper.toPageResponse(products);
     }
 
