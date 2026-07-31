@@ -27,7 +27,7 @@ public class Po extends BaseEntity {
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @ColumnDefault("'PENDING'")
     @Column(name = "status", columnDefinition = "purchase_order_status")
-    private PoStatus status;
+    private PoStatus status = PoStatus.PENDING;
 
     @Column(name = "reference")
     private String reference;
