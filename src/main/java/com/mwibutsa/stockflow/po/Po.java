@@ -66,4 +66,9 @@ public class Po extends BaseEntity {
         item.setQuantityReceived(payload.getQuantityReceived());
         return item;
     }
+
+    public boolean existsByProductId(UUID productId) {
+        var exists = items.stream().filter(item -> item.getProduct().getId().equals(productId)).findFirst().orElse(null);
+        return exists != null;
+    }
 }

@@ -128,7 +128,6 @@ public class PoService {
         updateSupplier(payload, po);
 
         syncItems(po, payload.getItems());
-
         poRepository.save(po);
         return poMapper.toDto(po);
     }
@@ -146,6 +145,7 @@ public class PoService {
 
         var incomingIds = payloadItems.stream().map(UpdatePoItemRequest::getId).filter(Objects::nonNull)
                 .collect(Collectors.toSet());
+
         po.getItems().removeIf(existingItem -> !incomingIds.contains(existingItem.getId()));
         // update existing.
         payloadItems.forEach(item -> {
@@ -157,6 +157,9 @@ public class PoService {
             } else {
                 var product = productRepository.findById(item.getProductId())
                         .orElseThrow(() -> new BadRequestException("Product is not found"));
+                if (po.existsByProductId(item.getProductId())) {
+                    throw new ConflictException("Duplicate item has been found");
+                }
                 var newItem = poMapper.toEntity(item);
                 newItem.setProduct(product);
                 po.addItem(newItem);
