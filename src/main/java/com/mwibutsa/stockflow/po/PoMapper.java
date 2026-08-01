@@ -5,6 +5,7 @@ import com.mwibutsa.stockflow.common.mapper.ToEntityMapper;
 import com.mwibutsa.stockflow.po.dto.PoItemRequest;
 import com.mwibutsa.stockflow.po.dto.PoRequest;
 import com.mwibutsa.stockflow.po.dto.PoResponse;
+import com.mwibutsa.stockflow.po.dto.UpdatePoRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -18,4 +19,9 @@ public interface PoMapper extends BaseMapper<Po, PoResponse>, ToEntityMapper<Po,
     PoItem toEntity(PoItemRequest payload);
 
     void update(PoItemRequest payload, @MappingTarget PoItem item);
+
+    @Mapping(ignore = true, target = "id")
+    @Mapping(ignore = true, target = "supplier")
+    @Mapping(ignore = true, target = "items")
+    Po update(UpdatePoRequest payload, @MappingTarget Po po);
 }

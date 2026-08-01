@@ -13,7 +13,7 @@ import java.util.UUID;
 public class PoItemRequest extends BasePoItemDto {
     @NotNull
     private UUID productId;
-    
+
     @PositiveOrZero
     protected Integer quantityReceived = 0;
 }
