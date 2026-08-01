@@ -6,10 +6,12 @@ import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
-
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PoItemRequest extends BasePoItemDto {
+public class ReceivePoItemRequest extends PoItemRequest {
     @NotNull
-    private UUID productId;
+    private UUID id;
+
+    @NotNull
+    private Integer receivedQuantity;
 }

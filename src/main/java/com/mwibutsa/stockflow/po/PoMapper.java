@@ -23,5 +23,6 @@ public interface PoMapper extends BaseMapper<Po, PoResponse>, ToEntityMapper<Po,
     @Mapping(ignore = true, target = "id")
     @Mapping(ignore = true, target = "supplier")
     @Mapping(ignore = true, target = "items")
+    @Mapping(target = "status", ignore = true)
     Po update(UpdatePoRequest payload, @MappingTarget Po po);
 }

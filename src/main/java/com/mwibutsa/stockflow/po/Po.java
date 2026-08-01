@@ -63,7 +63,12 @@ public class Po extends BaseEntity {
         var item = getItem(itemId);
         item.setQuantityOrdered(payload.getQuantityOrdered());
         item.setUnitCost(payload.getUnitCost());
-        item.setQuantityReceived(payload.getQuantityReceived());
+        return item;
+    }
+
+    public PoItem receiveQuantity(UUID itemId, Integer quantity) {
+        var item = getItem(itemId);
+        item.setQuantityReceived(quantity);
         return item;
     }
 

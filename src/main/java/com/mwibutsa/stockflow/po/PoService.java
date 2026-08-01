@@ -118,9 +118,11 @@ public class PoService {
     }
 
     public PoResponse updatePurchaseOrder(UUID poId, UpdatePoRequest payload) {
-
         var po = poRepository.findById(poId).orElseThrow(PurchaseOrderNotFoundException::new);
 
+        if (po.getStatus() != PoStatus.PENDING) {
+            throw new PurchaseOrderNotEditableException();
+        }
 
         poMapper.update(payload, po);
 
@@ -138,6 +140,48 @@ public class PoService {
                     .orElseThrow(() -> new BadRequestException("Invalid supplier", "supplierId"));
             po.setSupplier(supplier);
         }
+    }
+
+
+    public PoResponse updatePoStatus(UUID poId, UpdateStatusRequest payload) {
+        var po = poRepository.findById(poId).orElseThrow(PurchaseOrderNotFoundException::new);
+        if (PoStatus.APPROVED == payload.getStatus()) {
+            throw new BadRequestException("Status of approved is not allowed.");
+        }
+        po.setStatus(payload.getStatus());
+        poRepository.save(po);
+        return poMapper.toDto(po);
+    }
+
+    public PoResponse receivePurchaseOrder(UUID poId, ReceivePoRequest payload) {
+        var po = poRepository.findWithItems(poId).orElseThrow(PurchaseOrderNotFoundException::new);
+
+        if (po.getStatus() != PoStatus.APPROVED) {
+            throw new BadRequestException("You can only receive an approved purchase order");
+        }
+        syncReceivedItems(po, payload.getItems());
+        var updatedPo = poRepository.save(po);
+        return poMapper.toDto(updatedPo);
+    }
+
+    private void syncReceivedItems(Po po, List<ReceivePoItemRequest> payloadItems) {
+        // update existing.
+        payloadItems.forEach(item -> {
+
+            if (item.getId() == null) {
+                throw new PurchaseOrderNotEditableException();
+            }
+
+
+            var existingItem = po.getItem(item.getId());
+
+            int previousReceived = existingItem.getQuantityReceived();
+            int newTotalReceived = item.getReceivedQuantity() + item.getReceivedQuantity(); // or incoming delta depending on your DTO design
+            int difference = newTotalReceived - previousReceived;
+            // update product quantity.
+            var product = existingItem.getProduct();
+            product.setStockQuantity(product.getStockQuantity() + difference);
+        });
     }
 
     private void syncItems(Po po, List<UpdatePoItemRequest> payloadItems) {
@@ -165,5 +209,8 @@ public class PoService {
                 po.addItem(newItem);
             }
         });
+
+
     }
+
 }
