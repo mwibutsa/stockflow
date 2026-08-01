@@ -59,7 +59,7 @@ public class PoController {
 
     @PutMapping("/{poId}/items/{itemId}")
     public ResponseEntity<PoResponse> updateItem(@PathVariable UUID poId, @PathVariable UUID itemId, @Valid @RequestBody PoItemRequest payload) {
-        var item = poService.updateItem(poId, payload);
+        var item = poService.updateItem(poId, itemId, payload);
         return ResponseEntity.ok(item);
     }
 

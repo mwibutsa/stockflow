@@ -2,6 +2,7 @@ package com.mwibutsa.stockflow.po;
 
 import com.mwibutsa.stockflow.common.entity.BaseEntity;
 import com.mwibutsa.stockflow.common.exception.PurchaseOrderItemNotFoundException;
+import com.mwibutsa.stockflow.po.dto.PoItemRequest;
 import com.mwibutsa.stockflow.supplier.Supplier;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -48,9 +50,21 @@ public class Po extends BaseEntity {
     }
 
     public void removeItem(UUID itemId) {
-        var item = this.items.stream().filter(poItem -> poItem.getId().equals(itemId)).findFirst()
-                .orElseThrow(PurchaseOrderItemNotFoundException::new);
+        var item = getItem(this.items, itemId);
         this.items.remove(item);
         item.setPurchaseOrder(null);
+    }
+
+    private @NonNull PoItem getItem(Set<PoItem> items, UUID itemId) {
+        return items.stream().filter(poItem -> poItem.getId().equals(itemId)).findFirst()
+                .orElseThrow(PurchaseOrderItemNotFoundException::new);
+    }
+
+    public PoItem updateItem(UUID itemId, PoItemRequest payload) {
+        var item = getItem(items, itemId);
+        item.setQuantityOrdered(payload.getQuantityOrdered());
+        item.setUnitCost(payload.getUnitCost());
+        item.setQuantityReceived(payload.getQuantityReceived());
+        return item;
     }
 }

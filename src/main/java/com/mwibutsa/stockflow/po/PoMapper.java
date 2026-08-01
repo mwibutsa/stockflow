@@ -7,6 +7,7 @@ import com.mwibutsa.stockflow.po.dto.PoRequest;
 import com.mwibutsa.stockflow.po.dto.PoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PoMapper extends BaseMapper<Po, PoResponse>, ToEntityMapper<Po, PoRequest> {
@@ -15,4 +16,6 @@ public interface PoMapper extends BaseMapper<Po, PoResponse>, ToEntityMapper<Po,
     @Mapping(target = "product", ignore = true)
     @Mapping(target = "purchaseOrder", ignore = true)
     PoItem toEntity(PoItemRequest payload);
+
+    void update(PoItemRequest payload, @MappingTarget PoItem item);
 }

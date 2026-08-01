@@ -1,10 +1,7 @@
 package com.mwibutsa.stockflow.po;
 
 import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
-import com.mwibutsa.stockflow.common.exception.BadRequestException;
-import com.mwibutsa.stockflow.common.exception.ConflictException;
-import com.mwibutsa.stockflow.common.exception.PurchaseOrderNotEditableException;
-import com.mwibutsa.stockflow.common.exception.PurchaseOrderNotFoundException;
+import com.mwibutsa.stockflow.common.exception.*;
 import com.mwibutsa.stockflow.po.dto.PoItemRequest;
 import com.mwibutsa.stockflow.po.dto.PoRequest;
 import com.mwibutsa.stockflow.po.dto.PoResponse;
@@ -29,7 +26,9 @@ public class PoService {
     private final ProductRepository productRepository;
 
 
-    public PaginatedResponse<PoResponse> getPurchaseOrders(String search, Pageable pagination, PoStatus status, UUID supplierId) {
+    public PaginatedResponse<PoResponse> getPurchaseOrders(
+            String search, Pageable pagination, PoStatus status, UUID supplierId) {
+
         var spec = Specification
                 .where(PoSpecification.searchPurchaseOrders(search))
                 .and(PoSpecification.filterByStatus(status))
@@ -89,13 +88,27 @@ public class PoService {
     }
 
     public void removeItem(UUID poId, UUID itemId) {
-
         var po = poRepository.findById(poId).orElseThrow(PurchaseOrderNotFoundException::new);
         po.removeItem(itemId);
         poRepository.save(po);
     }
 
-    public PoResponse updateItem(UUID poId, PoItemRequest payload) {
-        return null;
+    public PoResponse updateItem(UUID poId, UUID poItemId, PoItemRequest payload) {
+        // validate modifiability
+        var po = poRepository.findById(poId).orElseThrow(PurchaseOrderNotFoundException::new);
+        if (po.getStatus() != PoStatus.PENDING) {
+            throw new PurchaseOrderNotEditableException();
+        }
+
+        // handle product changes
+        var updatedItem = po.updateItem(poItemId, payload);
+        if (!updatedItem.getProduct().getId().equals(payload.getProductId())) {
+            var product = productRepository.findById(payload.getProductId())
+                    .orElseThrow(ProductNotFoundException::new);
+            updatedItem.setProduct(product);
+        }
+        // save the item
+        poRepository.save(po);
+        return poMapper.toDto(po);
     }
 }
