@@ -1,10 +1,7 @@
 package com.mwibutsa.stockflow.po;
 
 import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
-import com.mwibutsa.stockflow.po.dto.PoItemRequest;
-import com.mwibutsa.stockflow.po.dto.PoRequest;
-import com.mwibutsa.stockflow.po.dto.PoResponse;
-import com.mwibutsa.stockflow.po.dto.UpdatePoRequest;
+import com.mwibutsa.stockflow.po.dto.*;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +52,12 @@ public class PoController {
     @PutMapping("/{poId}")
     public PoResponse updatePurchaseOrder(@PathVariable UUID poId, @Valid @RequestBody UpdatePoRequest payload) {
         return this.poService.updatePurchaseOrder(poId, payload);
+    }
+
+
+    @PutMapping("/{poId}/receive")
+    public PoResponse receivePurchaseOrder(@PathVariable UUID poId, @Valid @RequestBody ReceivePoRequest payload) {
+        return this.poService.receivePurchaseOrder(poId, payload);
     }
 
     @PostMapping("/{poId}/items")
