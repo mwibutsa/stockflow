@@ -1,6 +1,7 @@
 package com.mwibutsa.stockflow.common.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @SQLRestriction("is_deleted = false")
 public abstract class BaseEntity {
     @Id
+    @NotNull
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", updatable = false, nullable = false)
     private UUID id;

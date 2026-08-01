@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+
 public interface BaseMapper<E, D> {
 
     D toDto(E entity);
@@ -24,4 +25,6 @@ public interface BaseMapper<E, D> {
 
         return new PaginatedResponse<>(content, metadata);
     }
+
+
 }

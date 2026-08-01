@@ -1,17 +1,18 @@
 package com.mwibutsa.stockflow.po.dto;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 @Data
 public class BasePoItemDto {
+    @NotNull
     @Positive
-    private Integer quantityOrdered;
+    protected Integer quantityOrdered;
 
-    @PositiveOrZero
-    private Integer quantityReceived = 0;
-
+    @NotNull
     @Positive
-    private Integer unitCost;
+    protected BigDecimal unitCost;
 }

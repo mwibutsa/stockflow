@@ -13,4 +13,6 @@ public class PoItemResponse extends BasePoItemDto {
     private PoProductDto product;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer quantityReceived = 0;
+
 }
