@@ -1,0 +1,1 @@
+ALTER TYPE purchase_order_status ADD VALUE 'PARTIALLY_RECEIVED';

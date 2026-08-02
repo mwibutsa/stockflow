@@ -8,6 +8,7 @@ public enum PoStatus {
     PENDING,
     APPROVED,
     RECEIVED,
+    PARTIALLY_RECEIVED,
     CANCELLED;
 
     @JsonCreator
@@ -15,6 +16,4 @@ public enum PoStatus {
         if (value == null) return null;
         return PoStatus.valueOf(value.toUpperCase(Locale.ROOT));
     }
-
-
 }

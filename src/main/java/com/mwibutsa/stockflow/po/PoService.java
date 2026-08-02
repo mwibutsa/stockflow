@@ -2,6 +2,9 @@ package com.mwibutsa.stockflow.po;
 
 import com.mwibutsa.stockflow.common.dto.PaginatedResponse;
 import com.mwibutsa.stockflow.common.exception.*;
+import com.mwibutsa.stockflow.inventory.InventoryTransactionService;
+import com.mwibutsa.stockflow.inventory.StockTransactionType;
+import com.mwibutsa.stockflow.inventory.dto.InventoryTransactionRequest;
 import com.mwibutsa.stockflow.po.dto.*;
 import com.mwibutsa.stockflow.product.ProductRepository;
 import com.mwibutsa.stockflow.supplier.SupplierRepository;
@@ -9,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +29,7 @@ public class PoService {
     private final PoMapper poMapper;
     private final SupplierRepository supplierRepository;
     private final ProductRepository productRepository;
+    private final InventoryTransactionService inventoryTransactionService;
 
 
     public PaginatedResponse<PoResponse> getPurchaseOrders(
@@ -153,6 +158,7 @@ public class PoService {
         return poMapper.toDto(po);
     }
 
+    @Transactional
     public PoResponse receivePurchaseOrder(UUID poId, ReceivePoRequest payload) {
         var po = poRepository.findWithItems(poId).orElseThrow(PurchaseOrderNotFoundException::new);
 
@@ -172,16 +178,26 @@ public class PoService {
                 throw new PurchaseOrderNotEditableException();
             }
 
-
             var existingItem = po.getItem(item.getId());
 
             int previousReceived = existingItem.getQuantityReceived();
-            int newTotalReceived = item.getReceivedQuantity() + item.getReceivedQuantity(); // or incoming delta depending on your DTO design
+            int newTotalReceived = previousReceived + item.getReceivedQuantity();
             int difference = newTotalReceived - previousReceived;
-            // update product quantity.
             var product = existingItem.getProduct();
-            product.setStockQuantity(product.getStockQuantity() + difference);
+
+            // update product quantity.
+            po.receiveQuantity(item.getId(), newTotalReceived);
+
+            var inventoryTx = new InventoryTransactionRequest();
+            inventoryTx.setProductId(product.getId());
+            inventoryTx.setQuantity(difference);
+            inventoryTx.setNotes("Purchase order received");
+            inventoryTx.setReference("Received from PO: " + po.getReference());
+            inventoryTx.setType(StockTransactionType.STOCK_IN);
+
+            inventoryTransactionService.createNewTransaction(inventoryTx);
         });
+        syncPoProgress(po);
     }
 
     private void syncItems(Po po, List<UpdatePoItemRequest> payloadItems) {
@@ -213,4 +229,16 @@ public class PoService {
 
     }
 
+    private void syncPoProgress(Po po) {
+        boolean allFullyReceived = po.getItems().stream()
+                .allMatch(item -> item.getQuantityReceived() >= item.getQuantityOrdered());
+        boolean anyReceived = po.getItems().stream().anyMatch(item -> item.getQuantityReceived() > 0);
+        if (allFullyReceived) {
+            po.setStatus(PoStatus.RECEIVED);
+        } else if (anyReceived) {
+            po.setStatus(PoStatus.PARTIALLY_RECEIVED);
+        } else {
+            po.setStatus(PoStatus.APPROVED);
+        }
+    }
 }
