@@ -1,17 +1,20 @@
 package com.mwibutsa.stockflow.po.dto;
 
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.util.UUID;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class ReceivePoItemRequest extends PoItemRequest {
+public class ReceivePoItemRequest {
     @NotNull
     private UUID id;
 
     @NotNull
-    private Integer receivedQuantity;
+    private UUID productId;
+
+    @NotNull
+    @Positive
+    private Integer quantityReceived;
 }

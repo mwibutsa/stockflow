@@ -8,9 +8,9 @@ import lombok.Data;
 @Data
 public class BaseInventoryTransactionDto {
     @NotNull
-    protected StockTransactionType type;
+    private StockTransactionType type;
     @Positive
-    protected Integer quantity;
-    protected String reference;
-    protected String notes;
+    private Integer quantity;
+    private String reference;
+    private String notes;
 }

@@ -150,9 +150,15 @@ public class PoService {
 
     public PoResponse updatePoStatus(UUID poId, UpdateStatusRequest payload) {
         var po = poRepository.findById(poId).orElseThrow(PurchaseOrderNotFoundException::new);
-        if (PoStatus.APPROVED == payload.getStatus()) {
-            throw new BadRequestException("Status of approved is not allowed.");
+
+        if (po.getStatus() == PoStatus.RECEIVED || po.getStatus() == PoStatus.PARTIALLY_RECEIVED) {
+            throw new BadRequestException("Purchase order (PO) status can not be changed when a PO is either received or partially received.");
         }
+
+        if (PoStatus.RECEIVED == payload.getStatus() || PoStatus.PARTIALLY_RECEIVED == payload.getStatus()) {
+            throw new BadRequestException("Status of approved  or partially approved is not allowed.", "status");
+        }
+
         po.setStatus(payload.getStatus());
         poRepository.save(po);
         return poMapper.toDto(po);
@@ -162,9 +168,14 @@ public class PoService {
     public PoResponse receivePurchaseOrder(UUID poId, ReceivePoRequest payload) {
         var po = poRepository.findWithItems(poId).orElseThrow(PurchaseOrderNotFoundException::new);
 
-        if (po.getStatus() != PoStatus.APPROVED) {
+        if (po.getStatus() == PoStatus.RECEIVED) {
+            throw new BadRequestException("All items in the order have been already received.");
+        }
+
+        if (po.getStatus() != PoStatus.APPROVED && po.getStatus() != PoStatus.PARTIALLY_RECEIVED) {
             throw new BadRequestException("You can only receive an approved purchase order");
         }
+
         syncReceivedItems(po, payload.getItems());
         var updatedPo = poRepository.save(po);
         return poMapper.toDto(updatedPo);
@@ -181,7 +192,7 @@ public class PoService {
             var existingItem = po.getItem(item.getId());
 
             int previousReceived = existingItem.getQuantityReceived();
-            int newTotalReceived = previousReceived + item.getReceivedQuantity();
+            int newTotalReceived = previousReceived + item.getQuantityReceived();
             int difference = newTotalReceived - previousReceived;
             var product = existingItem.getProduct();
 

@@ -60,6 +60,12 @@ public class PoController {
         return this.poService.receivePurchaseOrder(poId, payload);
     }
 
+    @PutMapping("/{poId}/update-status")
+    public PoResponse approvePurchaseOrder(@PathVariable UUID poId, @Valid @RequestBody UpdateStatusRequest payload) {
+        return this.poService.updatePoStatus(poId, payload);
+    }
+
+
     @PostMapping("/{poId}/items")
     public ResponseEntity<PoResponse> addItem(@PathVariable UUID poId, @Valid @RequestBody PoItemRequest payload) {
         var item = poService.addPoItem(poId, payload);
